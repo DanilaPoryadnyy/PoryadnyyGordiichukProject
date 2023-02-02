@@ -18,14 +18,26 @@ import java.util.*;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
-    private static final int Height = 1080;
-    private static final int Width = 1920;
-    public static final double Speed = 10;
+    private static final int Height = 720;
+    private static final int Width = 1440;
+    public static final double Speed = 7;
     private Player player;
     private Map<KeyCode, Boolean> keys = new HashMap<>();
+    public static List<Enemy> enemies = new ArrayList<>();
 
-    public static void main(String[] args){
+    public static void main(String[] args)
+    {
         launch();
+    }
+    public static void shedule(long time, Runnable r){
+        new Thread(() -> {
+            try {
+                Thread.sleep(time);
+                r.run();
+            } catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+        }).start();
     }
 
     @Override
@@ -46,21 +58,60 @@ public class HelloApplication extends Application {
 
         loop.play();
 
+        spawnEnemies();
+
         canvas.setOnKeyPressed(e -> this.keys.put(e.getCode(),true));
         canvas.setOnKeyReleased(e -> this.keys.put(e.getCode(),false));
-        canvas.setOnMousePressed(e -> this.player.shoot(e.getX(),e.getY()));
-        canvas.setOnMouseDragged(e -> this.player.shoot(e.getX(),e.getY()));
+        canvas.setOnMouseClicked(e -> this.player.shoot(e.getX(),e.getY()));
 
 
         Scene scene = new Scene(pane, Width,Height);
         stage.setScene(scene);
         stage.show();
     }
+
+    private void spawnEnemies(){
+        Thread spawner = new Thread(()->{
+            try{
+                Random rand = new Random();
+                while(true){
+                    double x = rand.nextDouble()*Width;
+                    double y = rand.nextDouble()*Height;
+                    this.enemies.add(new Enemy(this.player, x, y));
+                    Thread.sleep(2000);
+                }
+            } catch (InterruptedException ex)
+            {
+                ex.printStackTrace();
+            }
+        });
+        spawner.setDaemon(true);
+        spawner.start();
+    }
+
     private void update(GraphicsContext gc)
     {
         gc.clearRect(0,0,Width, Height);
         gc.setFill(Color.GRAY);
         gc.fillRect(0,0, Width, Height);
+
+        for(int i = 0; i< enemies.size(); i++)
+        {
+            Enemy e = enemies.get(i);
+            e.render(gc);
+            for (int j = 0; j < Player.bullets.size(); j++)
+            {
+                if (e.collided(Player.bullets.get(j).GetX(), Player.bullets.get(j).GetY(), Enemy.Width, Pistol.Width))
+                {
+                    Player.bullets.remove(j);
+                    enemies.remove(i);
+                    i++;
+                    break;
+                }
+            }
+        }
+
+        this.player.render(gc);
 
         this.player.render(gc);
 
