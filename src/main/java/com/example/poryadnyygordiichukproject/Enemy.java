@@ -1,13 +1,15 @@
 package com.example.poryadnyygordiichukproject;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+
 
 public class Enemy {
     private double x,y;
     private Player player;
     public static final double Width = 25;
-    private static final double Speed = 7;
+    private static double Speed = 7;
 
     public Enemy(Player p, double x,double y)
     {
@@ -37,6 +39,7 @@ public class Enemy {
         return Math.sqrt(Math.pow(this.x+EnemyWidth/2-x-BulletOfPistolWidth/2,2)+Math.pow(this.y+EnemyWidth/2-y-BulletOfPistolWidth/2,2)) <= EnemyWidth+BulletOfPistolWidth;
     }
 
+
     public void render(GraphicsContext gc)
     {
         gc.setFill(Color.BLACK);
@@ -47,6 +50,7 @@ public class Enemy {
         {
             //Урон
             this.player.takeDamage(1);
+
         }
         else
         {
@@ -63,5 +67,6 @@ public class Enemy {
                 this.y -= Math.sin(angle)*Speed;
             }
         }
+
     }
 }
