@@ -18,16 +18,24 @@ import java.util.*;
 
 import java.io.IOException;
 
+import static com.example.poryadnyygordiichukproject.Player.hp;
+
 public class HelloApplication extends Application {
     public static final int Height = 720;
     public static final int Width = 1440;
     public static final double Speed = 7;
-    private int Kills = 0;
+    private static int Kills = 0;
     public static Player player;
     public static Map<KeyCode, Boolean> keys = new HashMap<>();
     public static List<Enemy> enemies = new ArrayList<>();
+    StackPane pane = new StackPane();
+    Canvas canvas = new Canvas(Width, Height);
+    GraphicsContext gc = canvas.getGraphicsContext2D();
+    Timeline loop = new Timeline(new KeyFrame(Duration.millis(1000.0 / 40), e -> update(gc)));
+
 
     public static void main(String[] args) {
+
         launch();
     }
 
@@ -47,15 +55,13 @@ public class HelloApplication extends Application {
     {
         stage.setTitle("First warrior shooter");
 
-        StackPane pane = new StackPane();
-        Canvas canvas = new Canvas(Width, Height);
+
         canvas.setFocusTraversable(true);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+
         pane.getChildren().add(canvas);
 
         this.player = new Player(400, 300);
 
-        Timeline loop = new Timeline(new KeyFrame(Duration.millis(1000.0 / 40), e -> update(gc)));
         loop.setCycleCount(Animation.INDEFINITE);
 
         loop.play();
@@ -69,13 +75,13 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(pane, Width, Height);
         stage.setScene(scene);
         stage.show();
-
     }
 
     private void spawnEnemies() {
         Thread spawner = new Thread(() -> {
             try {
                 Random rand = new Random();
+                Thread.sleep(1000);
                 while (true) {
                     double x = rand.nextDouble() * Width;
                     double y = rand.nextDouble() * Height;
@@ -94,7 +100,10 @@ public class HelloApplication extends Application {
         gc.clearRect(0, 0, Width, Height);
         gc.setFill(Color.GRAY);
         gc.fillRect(0, 0, Width, Height);
-
+        if(hp == 0)
+        {
+            loop.stop();
+        }
         for (int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
             e.render(gc);
