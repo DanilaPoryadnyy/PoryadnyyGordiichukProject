@@ -114,20 +114,20 @@ public class HelloApplication extends Application {
 
         this.player.render(gc);
 
-        if (this.keys.getOrDefault(KeyCode.W, false)) {
+        if (this.keys.getOrDefault(KeyCode.W, false) && player.GetY() > 1) {
             this.player.move(0, -Speed);
         }
-        if (this.keys.getOrDefault(KeyCode.S, false)) {
+        if (this.keys.getOrDefault(KeyCode.S, false) && player.GetY() < Height - 25) {
             this.player.move(0, Speed);
         }
-        if (this.keys.getOrDefault(KeyCode.D, false)) {
+        if (this.keys.getOrDefault(KeyCode.D, false) && player.GetX() < Width - 20) {
             this.player.move(Speed, 0);
         }
-        if (this.keys.getOrDefault(KeyCode.A, false)) {
+        if (this.keys.getOrDefault(KeyCode.A, false) && player.GetX() > 1) {
             this.player.move(-Speed, 0);
         }
 
-        //Kills nums
+        //Kills Count
         gc.setFill(Color.ORANGE);
         gc.fillText("KIlls: " + String.valueOf(Kills), Height - 680, Width - 1420, 30);
 
