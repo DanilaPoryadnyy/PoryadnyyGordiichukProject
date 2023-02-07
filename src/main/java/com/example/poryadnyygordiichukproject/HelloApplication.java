@@ -55,7 +55,6 @@ public class HelloApplication extends Application {
     {
         stage.setTitle("First warrior shooter");
 
-
         canvas.setFocusTraversable(true);
 
         pane.getChildren().add(canvas);
@@ -81,7 +80,6 @@ public class HelloApplication extends Application {
         Thread spawner = new Thread(() -> {
             try {
                 Random rand = new Random();
-                Thread.sleep(1000);
                 while (true) {
                     double x = rand.nextDouble() * Width;
                     double y = rand.nextDouble() * Height;
@@ -139,6 +137,5 @@ public class HelloApplication extends Application {
         //Kills Count
         gc.setFill(Color.ORANGE);
         gc.fillText("KIlls: " + String.valueOf(Kills), Height - 680, Width - 1420, 30);
-
     }
 }
