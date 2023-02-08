@@ -1,7 +1,6 @@
 package com.example.poryadnyygordiichukproject;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 
@@ -20,9 +19,9 @@ public class Enemy {
 
     private boolean checkCollision()
     {
-        for (int i =0; i< HelloApplication.enemies.size(); i++)
+        for (int i = 0; i< Main.enemies.size(); i++)
         {
-            Enemy e = HelloApplication.enemies.get(i);
+            Enemy e = Main.enemies.get(i);
             if (e != this)
             {
                 if(e.collided(this.x, this.y, Width, Width))
@@ -67,6 +66,5 @@ public class Enemy {
                 this.y -= Math.sin(angle)*Speed;
             }
         }
-
     }
 }

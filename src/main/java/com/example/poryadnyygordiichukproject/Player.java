@@ -4,17 +4,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 public class Player {
     private static final double Width = 20;
-    private double x, y;
+    private double x, y,xg,yg;
     public static double Ammo = 5;
-    public static List<Pistol> bullets = new ArrayList<>();
+    public static List<Gun> bullets = new ArrayList<>();
     private boolean shooting = false, damage = false;
-    public static int hp = 1;
+    public static double hp = 100;
 
     public Player(double x, double y) {
         this.x = x;
@@ -32,9 +29,9 @@ public class Player {
 
     public void takeDamage(int dmg) {
         if (damage) return;
-        //this.hp -= dmg;
+        this.hp -= dmg;
         damage = true;
-        HelloApplication.shedule(150, () -> damage = false);
+        Main.shedule(150, () -> damage = false);
     }
 
     public void render(GraphicsContext gc) {
@@ -53,21 +50,18 @@ public class Player {
     public void shoot(double x, double y) {
         if(Ammo == 0)
         {
-            new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    System.out.println(Ammo + System.currentTimeMillis());
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            }).start();
+            reloadAmmo();
         }
-        if (Ammo != 0)
+        else
         {
             Ammo--;
             double angle = Math.atan2(y - this.y, x - this.x);
-            Pistol b = new Pistol(angle, this.x, this.y);
+            Gun b = new Gun(angle, this.x, this.y);
             this.bullets.add(b);
         }
+    }
+    public static void reloadAmmo()
+    {
+        Main.Cooldown(2000);
     }
 }

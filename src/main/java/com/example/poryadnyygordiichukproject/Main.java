@@ -2,7 +2,6 @@ package com.example.poryadnyygordiichukproject;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -18,12 +17,13 @@ import java.util.*;
 
 import java.io.IOException;
 
-import static com.example.poryadnyygordiichukproject.Player.hp;
+import static com.example.poryadnyygordiichukproject.Player.*;
 
-public class HelloApplication extends Application {
+public class Main extends Application {
     public static final int Height = 720;
     public static final int Width = 1440;
     public static final double Speed = 7;
+    public static boolean ItReload = false;
     private static int Kills = 0;
     public static Player player;
     public static Map<KeyCode, Boolean> keys = new HashMap<>();
@@ -44,6 +44,28 @@ public class HelloApplication extends Application {
             try {
                 Thread.sleep(time);
                 r.run();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }).start();
+    }
+    public static void Cooldown(long time) {
+        if(ItReload) {
+            return;
+        }
+        ItReload = true;
+        new Thread(() -> {
+            try {
+                Thread.sleep(time);
+                if (Gun.MachineGun)
+                {
+                    player.Ammo = 30;
+                }
+                else
+                {
+                    Player.Ammo = 5;
+                }
+                ItReload = false;
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
@@ -75,7 +97,6 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
     private void spawnEnemies() {
         Thread spawner = new Thread(() -> {
             try {
@@ -83,7 +104,8 @@ public class HelloApplication extends Application {
                 while (true) {
                     double x = rand.nextDouble() * Width;
                     double y = rand.nextDouble() * Height;
-                    this.enemies.add(new Enemy(this.player, x, y));
+                    this.enemies.add(new Enemy(this.player ,x, y));
+
                     Thread.sleep(2000);
                 }
             } catch (InterruptedException ex) {
@@ -98,6 +120,10 @@ public class HelloApplication extends Application {
         gc.clearRect(0, 0, Width, Height);
         gc.setFill(Color.GRAY);
         gc.fillRect(0, 0, Width, Height);
+        if(Ammo == 0)
+        {
+            reloadAmmo();
+        }
         if(hp == 0)
         {
             loop.stop();
@@ -106,7 +132,7 @@ public class HelloApplication extends Application {
             Enemy e = enemies.get(i);
             e.render(gc);
             for (int j = 0; j < Player.bullets.size(); j++) {
-                if (e.collided(Player.bullets.get(j).GetX(), Player.bullets.get(j).GetY(), Enemy.Width, Pistol.Width)) {
+                if (e.collided(Player.bullets.get(j).GetX(), Player.bullets.get(j).GetY(), Enemy.Width, Gun.Width)) {
                     Player.bullets.remove(j);
                     enemies.remove(i);
                     i++;
@@ -136,6 +162,17 @@ public class HelloApplication extends Application {
 
         //Kills Count
         gc.setFill(Color.ORANGE);
-        gc.fillText("KIlls: " + String.valueOf(Kills), Height - 680, Width - 1420, 30);
+        gc.fillText("KIlls: " + String.valueOf(Kills), Height - 680, Width - 1420, 40);
+        //Reloading GUI
+        gc.setFill(Color.GREEN);
+        gc.fillRect(50, Height-150, Ammo,30);
+        gc.setStroke(Color.BLACK);
+        gc.strokeRect(50,Height-150,30,30);
+        //HP bar
+        gc.setFill(Color.RED);
+        gc.fillRect(50, Height-200, 100*(hp/100),30);
+        gc.setStroke(Color.BLACK);
+        gc.strokeRect(50,Height-200,100,30);
+
     }
 }
