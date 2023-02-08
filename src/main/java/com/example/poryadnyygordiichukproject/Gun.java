@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 
 public class Gun {
     private double angle, x, y,xg,yg;
-    private static final double Speed= 25;
+    private static final double Speed= 50;//25 - Pistol, 50 - MG
     public static final double Width  = 6;
     public static boolean MachineGun = false;
 
@@ -14,13 +14,6 @@ public class Gun {
         this.y = y+8;
         this.angle = angle;
     }
-    public Gun (double xg, double yg)
-    {
-        this.xg = xg + 8;
-        this.yg = yg + 8;
-
-    }
-
     public double GetX()
     {
         return this.x;

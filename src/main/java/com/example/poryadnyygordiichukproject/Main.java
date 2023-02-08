@@ -20,8 +20,8 @@ import java.io.IOException;
 import static com.example.poryadnyygordiichukproject.Player.*;
 
 public class Main extends Application {
-    public static final int Height = 720;
-    public static final int Width = 1440;
+    public static final int Height = 1080;
+    public static final int Width = 1920;
     public static final double Speed = 7;
     public static boolean ItReload = false;
     private static int Kills = 0;
@@ -159,10 +159,19 @@ public class Main extends Application {
         if (this.keys.getOrDefault(KeyCode.A, false) && player.GetX() > 1) {
             this.player.move(-Speed, 0);
         }
+        if (this.keys.getOrDefault(KeyCode.R, false)) {
+            reloadAmmo();
+        }
 
         //Kills Count
         gc.setFill(Color.ORANGE);
-        gc.fillText("KIlls: " + String.valueOf(Kills), Height - 680, Width - 1420, 40);
+        gc.fillText("KIlls: " + String.valueOf(Kills), Width - 1800,Height - 1030, 40);
+        //Ammo reloading message
+        if(ItReload)
+        {
+            gc.setFill(Color.RED);
+            gc.fillText("RELOADING!!!",  Width - 1750, Height - 130,80);
+        }
         //Reloading GUI
         gc.setFill(Color.GREEN);
         gc.fillRect(50, Height-150, Ammo,30);
@@ -173,6 +182,5 @@ public class Main extends Application {
         gc.fillRect(50, Height-200, 100*(hp/100),30);
         gc.setStroke(Color.BLACK);
         gc.strokeRect(50,Height-200,100,30);
-
     }
 }

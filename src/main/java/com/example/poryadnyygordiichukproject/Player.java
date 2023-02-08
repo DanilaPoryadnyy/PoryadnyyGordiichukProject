@@ -54,10 +54,13 @@ public class Player {
         }
         else
         {
-            Ammo--;
-            double angle = Math.atan2(y - this.y, x - this.x);
-            Gun b = new Gun(angle, this.x, this.y);
-            this.bullets.add(b);
+            if (!Main.ItReload)
+            {
+                Ammo--;
+                double angle = Math.atan2(y - this.y, x - this.x);
+                Gun b = new Gun(angle, this.x, this.y);
+                this.bullets.add(b);
+            }
         }
     }
     public static void reloadAmmo()
