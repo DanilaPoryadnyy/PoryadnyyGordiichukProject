@@ -4,8 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Gun {
-    private double angle, x, y,xg,yg;
-    private static final double Speed= 50;//25 - Pistol, 50 - MG
+    private double angle, x, y;
+    private static final double Speed= 25;//25 - Pistol, 50 - MG
     public static final double Width  = 6;
     public static boolean MachineGun = false;
 

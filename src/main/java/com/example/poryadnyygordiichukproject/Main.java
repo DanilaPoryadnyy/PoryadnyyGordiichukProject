@@ -4,14 +4,20 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.*;
 
@@ -20,14 +26,17 @@ import java.io.IOException;
 import static com.example.poryadnyygordiichukproject.Player.*;
 
 public class Main extends Application {
-    public static final int Height = 1080;
-    public static final int Width = 1920;
+    public static final int Height = 1050;
+    public static final int Width = 1680;
     public static final double Speed = 7;
     public static boolean ItReload = false;
     private static int Kills = 0;
     public static Player player;
     public static Map<KeyCode, Boolean> keys = new HashMap<>();
     public static List<Enemy> enemies = new ArrayList<>();
+    static ImageView imageView;
+    Image bckgrnd;
+    Image jacket;
     StackPane pane = new StackPane();
     Canvas canvas = new Canvas(Width, Height);
     GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -93,6 +102,17 @@ public class Main extends Application {
         canvas.setOnKeyReleased(e -> this.keys.put(e.getCode(), false));
         canvas.setOnMouseClicked(e -> this.player.shoot(e.getX(), e.getY()));
 
+        bckgrnd = new Image("C:\\Users\\gumdu\\Downloads\\background.JPG");
+
+        jacket = new Image(new FileInputStream("C:\\Users\\gumdu\\Downloads\\jckt.PNG"));
+        imageView = new ImageView(jacket);
+        imageView.setX(Player.player.GetX());
+        imageView.setX(Player.player.GetY());
+        imageView.setFitHeight(70);
+        imageView.setFitWidth(70);
+        imageView.setPreserveRatio(true);
+        pane.getChildren().add(imageView);
+
         Scene scene = new Scene(pane, Width, Height);
         stage.setScene(scene);
         stage.show();
@@ -118,8 +138,10 @@ public class Main extends Application {
 
     private void update(GraphicsContext gc) {
         gc.clearRect(0, 0, Width, Height);
-        gc.setFill(Color.GRAY);
+        gc.setFill(new ImagePattern(bckgrnd));
         gc.fillRect(0, 0, Width, Height);
+
+
         if(Ammo == 0)
         {
             reloadAmmo();
@@ -141,9 +163,6 @@ public class Main extends Application {
                 }
             }
         }
-
-
-        this.player.render(gc);
 
         this.player.render(gc);
 

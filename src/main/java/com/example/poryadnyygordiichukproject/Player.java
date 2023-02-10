@@ -1,13 +1,18 @@
 package com.example.poryadnyygordiichukproject;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+
+public class Player extends Main {
     private static final double Width = 20;
-    private double x, y,xg,yg;
+    private double x, y;
     public static double Ammo = 5;
     public static List<Gun> bullets = new ArrayList<>();
     private boolean shooting = false, damage = false;
@@ -35,8 +40,12 @@ public class Player {
     }
 
     public void render(GraphicsContext gc) {
+
         gc.setFill(Color.RED);
         gc.fillOval(this.x, this.y, Width, Width);
+
+        gc.drawImage(jacket,GetX(),GetY(),60,60);
+
         for (int i = 0; i < this.bullets.size(); i++) {
             this.bullets.get(i).render(gc);
         }
