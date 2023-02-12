@@ -4,7 +4,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,11 +16,16 @@ import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.*;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.example.poryadnyygordiichukproject.Player.*;
 
@@ -34,12 +38,12 @@ public class Main extends Application {
     public static Player player;
     public static Map<KeyCode, Boolean> keys = new HashMap<>();
     public static List<Enemy> enemies = new ArrayList<>();
-    static ImageView imageView;
-    Image bckgrnd;
-    Image jacket;
+    private BufferedImage img;
+    private Image bckgrnd;
     StackPane pane = new StackPane();
     Canvas canvas = new Canvas(Width, Height);
     GraphicsContext gc = canvas.getGraphicsContext2D();
+
     Timeline loop = new Timeline(new KeyFrame(Duration.millis(1000.0 / 40), e -> update(gc)));
 
 
@@ -104,15 +108,6 @@ public class Main extends Application {
 
         bckgrnd = new Image("C:\\Users\\gumdu\\Downloads\\background.JPG");
 
-        jacket = new Image(new FileInputStream("C:\\Users\\gumdu\\Downloads\\jckt.PNG"));
-        imageView = new ImageView(jacket);
-        imageView.setX(Player.player.GetX());
-        imageView.setX(Player.player.GetY());
-        imageView.setFitHeight(70);
-        imageView.setFitWidth(70);
-        imageView.setPreserveRatio(true);
-        pane.getChildren().add(imageView);
-
         Scene scene = new Scene(pane, Width, Height);
         stage.setScene(scene);
         stage.show();
@@ -141,6 +136,8 @@ public class Main extends Application {
         gc.setFill(new ImagePattern(bckgrnd));
         gc.fillRect(0, 0, Width, Height);
 
+        importImg();
+        paintComponent();
 
         if(Ammo == 0)
         {
@@ -201,5 +198,19 @@ public class Main extends Application {
         gc.fillRect(50, Height-200, 100*(hp/100),30);
         gc.setStroke(Color.BLACK);
         gc.strokeRect(50,Height-200,100,30);
+    }
+    private void importImg()
+    {
+        InputStream is = getClass().getResourceAsStream("/jckt.png");
+        try {
+            img = ImageIO.read(is);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    private void paintComponent(Graphics g)
+    {
+        g.drawImage(img, 0,0,null);
     }
 }

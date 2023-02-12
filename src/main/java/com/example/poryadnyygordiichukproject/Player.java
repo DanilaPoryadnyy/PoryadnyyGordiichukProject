@@ -1,11 +1,7 @@
 package com.example.poryadnyygordiichukproject;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +39,6 @@ public class Player extends Main {
 
         gc.setFill(Color.RED);
         gc.fillOval(this.x, this.y, Width, Width);
-
-        gc.drawImage(jacket,GetX(),GetY(),60,60);
 
         for (int i = 0; i < this.bullets.size(); i++) {
             this.bullets.get(i).render(gc);
