@@ -30,16 +30,14 @@ import java.util.List;
 import static com.example.poryadnyygordiichukproject.Player.*;
 
 public class Main extends Application {
-    public static final int Height = 1050;
-    public static final int Width = 1680;
+    public static final int Height = 1080;
+    public static final int Width = 1920;
     public static final double Speed = 7;
     public static boolean ItReload = false;
     private static int Kills = 0;
     public static Player player;
     public static Map<KeyCode, Boolean> keys = new HashMap<>();
     public static List<Enemy> enemies = new ArrayList<>();
-    private BufferedImage img;
-    private Image bckgrnd;
     StackPane pane = new StackPane();
     Canvas canvas = new Canvas(Width, Height);
     GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -106,7 +104,6 @@ public class Main extends Application {
         canvas.setOnKeyReleased(e -> this.keys.put(e.getCode(), false));
         canvas.setOnMouseClicked(e -> this.player.shoot(e.getX(), e.getY()));
 
-        bckgrnd = new Image("C:\\Users\\gumdu\\Downloads\\background.JPG");
 
         Scene scene = new Scene(pane, Width, Height);
         stage.setScene(scene);
@@ -133,11 +130,8 @@ public class Main extends Application {
 
     private void update(GraphicsContext gc) {
         gc.clearRect(0, 0, Width, Height);
-        gc.setFill(new ImagePattern(bckgrnd));
+        gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, Width, Height);
-
-        importImg();
-        paintComponent();
 
         if(Ammo == 0)
         {
@@ -198,19 +192,5 @@ public class Main extends Application {
         gc.fillRect(50, Height-200, 100*(hp/100),30);
         gc.setStroke(Color.BLACK);
         gc.strokeRect(50,Height-200,100,30);
-    }
-    private void importImg()
-    {
-        InputStream is = getClass().getResourceAsStream("/jckt.png");
-        try {
-            img = ImageIO.read(is);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-    private void paintComponent(Graphics g)
-    {
-        g.drawImage(img, 0,0,null);
     }
 }
