@@ -5,11 +5,13 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -19,6 +21,7 @@ import javafx.util.Duration;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.beans.EventHandler;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -30,8 +33,8 @@ import java.util.List;
 import static com.example.poryadnyygordiichukproject.Player.*;
 
 public class Main extends Application {
-    public static final int Height = 1080;
-    public static final int Width = 1920;
+    public static final int Height = 768;
+    public static final int Width = 1440;
     public static final double Speed = 7;
     public static boolean ItReload = false;
     private static int Kills = 0;
@@ -44,6 +47,8 @@ public class Main extends Application {
 
     Timeline loop = new Timeline(new KeyFrame(Duration.millis(1000.0 / 40), e -> update(gc)));
 
+    Image dead = new Image("https://imageup.ru/img174/4211934/deadjckt.png");
+    Image img = new Image("https://imageup.ru/img184/4212043/newjacket.png");
 
     public static void main(String[] args) {
 
@@ -104,7 +109,6 @@ public class Main extends Application {
         canvas.setOnKeyReleased(e -> this.keys.put(e.getCode(), false));
         canvas.setOnMouseClicked(e -> this.player.shoot(e.getX(), e.getY()));
 
-
         Scene scene = new Scene(pane, Width, Height);
         stage.setScene(scene);
         stage.show();
@@ -114,10 +118,9 @@ public class Main extends Application {
             try {
                 Random rand = new Random();
                 while (true) {
-                    double x = rand.nextDouble() * Width;
-                    double y = rand.nextDouble() * Height;
+                    double x = Player.player.GetX() + rand.nextDouble(-500,Width);
+                    double y = Player.player.GetY() + rand.nextDouble(-500,Height);;
                     this.enemies.add(new Enemy(this.player ,x, y));
-
                     Thread.sleep(2000);
                 }
             } catch (InterruptedException ex) {
@@ -130,8 +133,11 @@ public class Main extends Application {
 
     private void update(GraphicsContext gc) {
         gc.clearRect(0, 0, Width, Height);
-        gc.setFill(Color.WHITE);
+        gc.setFill(Color.GRAY);
         gc.fillRect(0, 0, Width, Height);
+
+        Point p = MouseInfo.getPointerInfo().getLocation();
+        rotImg(p.x,p.y);
 
         if(Ammo == 0)
         {
@@ -139,7 +145,10 @@ public class Main extends Application {
         }
         if(hp == 0)
         {
-            loop.stop();
+            gc.setFill(Color.RED);
+            gc.fillText("GAME OVER! \nYour score: " + Kills,  700, 400,1000);
+            gc.drawImage(dead, Player.player.GetX(),Player.player.GetY(),80,80);
+            loop.pause();
         }
         for (int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
@@ -175,12 +184,12 @@ public class Main extends Application {
 
         //Kills Count
         gc.setFill(Color.ORANGE);
-        gc.fillText("KIlls: " + String.valueOf(Kills), Width - 1800,Height - 1030, 40);
+        gc.fillText("KIlls: " + String.valueOf(Kills), Width - 1330,Height - 720, 40);
         //Ammo reloading message
         if(ItReload)
         {
             gc.setFill(Color.RED);
-            gc.fillText("RELOADING!!!",  Width - 1750, Height - 130,80);
+            gc.fillText("RELOADING!!!",  Width - 1240, Height - 185,80);
         }
         //Reloading GUI
         gc.setFill(Color.GREEN);
@@ -192,5 +201,21 @@ public class Main extends Application {
         gc.fillRect(50, Height-200, 100*(hp/100),30);
         gc.setStroke(Color.BLACK);
         gc.strokeRect(50,Height-200,100,30);
+
+    }
+    ImageView iv = new ImageView(img);
+    static Image rotatedImage;
+    SnapshotParameters params;
+    public void rotImg(double x, double y)
+    {
+        double xDistance = x - Player.player.GetX();
+        double yDistance = y - Player.player.GetY();
+        double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
+
+        iv.setRotate((float)angleToTurn);
+        params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+        rotatedImage = iv.snapshot(params, null);
+
     }
 }

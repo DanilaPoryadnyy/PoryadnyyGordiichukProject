@@ -1,9 +1,18 @@
 package com.example.poryadnyygordiichukproject;
 
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.atan2;
 
 
 public class Player extends Main {
@@ -12,7 +21,7 @@ public class Player extends Main {
     public static double Ammo = 5;
     public static List<Gun> bullets = new ArrayList<>();
     private boolean shooting = false, damage = false;
-    public static double hp = 100;
+    public static double hp = 111;
 
     public Player(double x, double y) {
         this.x = x;
@@ -37,8 +46,10 @@ public class Player extends Main {
 
     public void render(GraphicsContext gc) {
 
-        gc.setFill(Color.RED);
-        gc.fillOval(this.x, this.y, Width, Width);
+        if(hp>1)
+        {
+            gc.drawImage(rotatedImage,this.x,this.y,70,40);
+        }
 
         for (int i = 0; i < this.bullets.size(); i++) {
             this.bullets.get(i).render(gc);
@@ -50,6 +61,7 @@ public class Player extends Main {
         this.y += y;
     }
 
+
     public void shoot(double x, double y) {
         if(Ammo == 0)
         {
@@ -60,7 +72,7 @@ public class Player extends Main {
             if (!Main.ItReload)
             {
                 Ammo--;
-                double angle = Math.atan2(y - this.y, x - this.x);
+                double angle = atan2(y - this.y, x - this.x);
                 Gun b = new Gun(angle, this.x, this.y);
                 this.bullets.add(b);
             }

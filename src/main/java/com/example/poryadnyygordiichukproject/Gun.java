@@ -10,8 +10,8 @@ public class Gun {
     public static boolean MachineGun = false;
 
     public Gun(double angle, double x, double y){
-        this.x = x+8;
-        this.y = y+8;
+        this.x = x;
+        this.y = y;
         this.angle = angle;
     }
     public double GetX()

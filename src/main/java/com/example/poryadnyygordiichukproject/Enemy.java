@@ -1,6 +1,7 @@
 package com.example.poryadnyygordiichukproject;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 
@@ -38,11 +39,11 @@ public class Enemy {
         return Math.sqrt(Math.pow(this.x+EnemyWidth/2-x-BulletOfPistolWidth/2,2)+Math.pow(this.y+EnemyWidth/2-y-BulletOfPistolWidth/2,2)) <= EnemyWidth+BulletOfPistolWidth;
     }
 
-
+    Image enemyimg = new Image("https://imageup.ru/img99/4212179/enem.png");
     public void render(GraphicsContext gc)
     {
-        gc.setFill(Color.BLACK);
-        gc.fillOval(this.x,this.y,Width,Width);
+
+        gc.drawImage(enemyimg,this.x,this.y,70,43);
         double distance = Math.sqrt(Math.pow(this.x - this.player.GetX(),2)+Math.pow(this.y - this.player.GetY(), 2));
 
         if(distance <= 30)
