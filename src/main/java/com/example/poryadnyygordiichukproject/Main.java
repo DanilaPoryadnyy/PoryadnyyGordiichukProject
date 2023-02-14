@@ -44,11 +44,13 @@ public class Main extends Application {
     StackPane pane = new StackPane();
     Canvas canvas = new Canvas(Width, Height);
     GraphicsContext gc = canvas.getGraphicsContext2D();
-
     Timeline loop = new Timeline(new KeyFrame(Duration.millis(1000.0 / 40), e -> update(gc)));
 
     Image dead = new Image("https://imageup.ru/img174/4211934/deadjckt.png");
     Image img = new Image("https://imageup.ru/img184/4212043/newjacket.png");
+    Image enemyimg = new Image("https://imageup.ru/img99/4212179/enem.png");
+    Image floor = new Image("https://imageup.ru/img204/4213013/floort.jpg");
+    Image ammoImg = new Image("https://imageup.ru/img91/4213055/newammo.png");
 
     public static void main(String[] args) {
 
@@ -109,6 +111,7 @@ public class Main extends Application {
         canvas.setOnKeyReleased(e -> this.keys.put(e.getCode(), false));
         canvas.setOnMouseClicked(e -> this.player.shoot(e.getX(), e.getY()));
 
+
         Scene scene = new Scene(pane, Width, Height);
         stage.setScene(scene);
         stage.show();
@@ -133,11 +136,12 @@ public class Main extends Application {
 
     private void update(GraphicsContext gc) {
         gc.clearRect(0, 0, Width, Height);
-        gc.setFill(Color.GRAY);
-        gc.fillRect(0, 0, Width, Height);
+        gc.drawImage(floor,0,0, Width, Height);
 
         Point p = MouseInfo.getPointerInfo().getLocation();
         rotImg(p.x,p.y);
+
+        rotImgEnem(Player.player.GetX(),Player.player.GetY());
 
         if(Ammo == 0)
         {
@@ -166,10 +170,10 @@ public class Main extends Application {
 
         this.player.render(gc);
 
-        if (this.keys.getOrDefault(KeyCode.W, false) && player.GetY() > 1) {
+        if (this.keys.getOrDefault(KeyCode.W, false) && player.GetY() > 75) {
             this.player.move(0, -Speed);
         }
-        if (this.keys.getOrDefault(KeyCode.S, false) && player.GetY() < Height - 25) {
+        if (this.keys.getOrDefault(KeyCode.S, false) && player.GetY() < Height - 100) {
             this.player.move(0, Speed);
         }
         if (this.keys.getOrDefault(KeyCode.D, false) && player.GetX() < Width - 20) {
@@ -191,11 +195,35 @@ public class Main extends Application {
             gc.setFill(Color.RED);
             gc.fillText("RELOADING!!!",  Width - 1240, Height - 185,80);
         }
-        //Reloading GUI
-        gc.setFill(Color.GREEN);
-        gc.fillRect(50, Height-150, Ammo,30);
-        gc.setStroke(Color.BLACK);
-        gc.strokeRect(50,Height-150,30,30);
+        //Ammo GUI
+        switch (Ammo)
+        {
+            case 1:
+                gc.drawImage(ammoImg, 30, 620, 60,60);
+                break;
+            case 2:
+                gc.drawImage(ammoImg, 30, 620, 60,60);
+                gc.drawImage(ammoImg, 40, 620, 60,60);
+                break;
+            case 3:
+                gc.drawImage(ammoImg, 30, 620, 60,60);
+                gc.drawImage(ammoImg, 40, 620, 60,60);
+                gc.drawImage(ammoImg, 50, 620, 60,60);
+                break;
+            case 4:
+                gc.drawImage(ammoImg, 30, 620, 60,60);
+                gc.drawImage(ammoImg, 40, 620, 60,60);
+                gc.drawImage(ammoImg, 50, 620, 60,60);
+                gc.drawImage(ammoImg, 60, 620, 60,60);
+                break;
+            case 5:
+                gc.drawImage(ammoImg, 40, 620, 60,60);
+                gc.drawImage(ammoImg, 30, 620, 60,60);
+                gc.drawImage(ammoImg, 50, 620, 60,60);
+                gc.drawImage(ammoImg, 60, 620, 60,60);
+                gc.drawImage(ammoImg, 70, 620, 60,60);
+                break;
+        }
         //HP bar
         gc.setFill(Color.RED);
         gc.fillRect(50, Height-200, 100*(hp/100),30);
@@ -206,6 +234,7 @@ public class Main extends Application {
     ImageView iv = new ImageView(img);
     static Image rotatedImage;
     SnapshotParameters params;
+
     public void rotImg(double x, double y)
     {
         double xDistance = x - Player.player.GetX();
@@ -218,4 +247,19 @@ public class Main extends Application {
         rotatedImage = iv.snapshot(params, null);
 
     }
+    ImageView iv1 = new ImageView(enemyimg);
+    static Image rotatedImage1;
+    SnapshotParameters params1;
+    public void rotImgEnem(double x, double y)
+    {
+        double xDistance = x - Enemy.player1.GetX();
+        double yDistance = y - Enemy.player1.GetY();
+        double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
+
+        iv1.setRotate((float)angleToTurn);
+        params1 = new SnapshotParameters();
+        params1.setFill(Color.TRANSPARENT);
+        rotatedImage1 = iv1.snapshot(params1, null);
+    }
+
 }

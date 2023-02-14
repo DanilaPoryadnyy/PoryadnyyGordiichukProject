@@ -18,10 +18,10 @@ import static java.lang.Math.atan2;
 public class Player extends Main {
     private static final double Width = 20;
     private double x, y;
-    public static double Ammo = 5;
+    public static int Ammo = 5;
     public static List<Gun> bullets = new ArrayList<>();
     private boolean shooting = false, damage = false;
-    public static double hp = 111;
+    public static double hp = 100;
 
     public Player(double x, double y) {
         this.x = x;
@@ -71,6 +71,7 @@ public class Player extends Main {
         {
             if (!Main.ItReload)
             {
+                Sound.playSound("C:\\Users\\OEM\\Downloads\\PoryadnyyGordiichukProjectNew\\src\\main\\java\\com\\example\\poryadnyygordiichukproject\\shoot.wav").join();
                 Ammo--;
                 double angle = atan2(y - this.y, x - this.x);
                 Gun b = new Gun(angle, this.x, this.y);
@@ -80,6 +81,7 @@ public class Player extends Main {
     }
     public static void reloadAmmo()
     {
+        Sound.playSound("C:\\Users\\OEM\\Downloads\\PoryadnyyGordiichukProjectNew\\src\\main\\java\\com\\example\\poryadnyygordiichukproject\\reload.wav").join();
         Main.Cooldown(2000);
     }
 }
