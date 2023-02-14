@@ -9,6 +9,7 @@ import javafx.scene.transform.Rotate;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,11 @@ public class Player extends Main {
     public static List<Gun> bullets = new ArrayList<>();
     private boolean shooting = false, damage = false;
     public static double hp = 100;
+    File shooterF = new File("C:\\Users\\student.OP9_WinDC.003\\Desktop\\PoryadnyyGordiichukProject\\src\\main\\java\\com\\example\\poryadnyygordiichukproject\\shoot.wav");
+    Sound shooter = new Sound(shooterF);
+    static File reloadF = new File("C:\\Users\\student.OP9_WinDC.003\\Desktop\\PoryadnyyGordiichukProject\\src\\main\\java\\com\\example\\poryadnyygordiichukproject\\reload.wav");
 
+    static Sound reloader = new Sound(reloadF);
     public Player(double x, double y) {
         this.x = x;
         this.y = y;
@@ -71,7 +76,7 @@ public class Player extends Main {
         {
             if (!Main.ItReload)
             {
-                Sound.playSound("C:\\Users\\OEM\\Downloads\\PoryadnyyGordiichukProjectNew\\src\\main\\java\\com\\example\\poryadnyygordiichukproject\\shoot.wav").join();
+                shooter.play();
                 Ammo--;
                 double angle = atan2(y - this.y, x - this.x);
                 Gun b = new Gun(angle, this.x, this.y);
@@ -81,7 +86,7 @@ public class Player extends Main {
     }
     public static void reloadAmmo()
     {
-        Sound.playSound("C:\\Users\\OEM\\Downloads\\PoryadnyyGordiichukProjectNew\\src\\main\\java\\com\\example\\poryadnyygordiichukproject\\reload.wav").join();
+        reloader.play();
         Main.Cooldown(2000);
     }
 }

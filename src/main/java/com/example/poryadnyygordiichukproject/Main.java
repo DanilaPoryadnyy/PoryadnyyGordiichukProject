@@ -51,7 +51,7 @@ public class Main extends Application {
     Image enemyimg = new Image("https://imageup.ru/img99/4212179/enem.png");
     Image floor = new Image("https://imageup.ru/img204/4213013/floort.jpg");
     Image ammoImg = new Image("https://imageup.ru/img91/4213055/newammo.png");
-
+    Image deadimg = new Image("https://imageup.ru/img249/4213318/deadenem.png");
     public static void main(String[] args) {
 
         launch();
@@ -161,6 +161,7 @@ public class Main extends Application {
                 if (e.collided(Player.bullets.get(j).GetX(), Player.bullets.get(j).GetY(), Enemy.Width, Gun.Width)) {
                     Player.bullets.remove(j);
                     enemies.remove(i);
+                    gc.drawImage(deadimg,40,40,40,40);
                     i++;
                     Kills++;
                     break;
@@ -261,5 +262,4 @@ public class Main extends Application {
         params1.setFill(Color.TRANSPARENT);
         rotatedImage1 = iv1.snapshot(params1, null);
     }
-
 }
